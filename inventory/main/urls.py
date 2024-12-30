@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InventoryViewSet, RequestViewSet, TransactionViewSet
+from .views import InventoryViewSet, RequestViewSet, TransactionViewSet ,LoginView
 
 urlpatterns = [
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('requests/<int:pk>/', RequestViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='request-detail'),
     path('transactions/', TransactionViewSet.as_view({'get': 'list', 'post': 'create'}), name='transaction-list'),
     path('transactions/<int:pk>/', TransactionViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='transaction-detail'),
+    path('auth/login/',LoginView.as_view(),name="login-user")
 ]
