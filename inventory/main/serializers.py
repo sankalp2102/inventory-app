@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, InventoryItem, Request, Transaction
-
+from django.contrib.auth import authenticate
+from rest_framework.exceptions import AuthenticationFailed
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -25,3 +26,20 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
+        
+class LoginSerializer(serializers.Serializer):
+    username=serializers.CharField()
+    password=serializers.CharField(write_only=True)
+    
+    def validate(self,data):
+        username=data.get("username")
+        password=data.get("password")
+        user=authenticate(username=username,password=password)
+        
+        if not user:
+            raise AuthenticationFailed("Invalid Credentials")
+        
+        if not user.is_active:
+            raise AuthenticationFailed("user is disabled")
+        
+        return{"user":user}
